@@ -4,13 +4,8 @@
  * just an example I would have appreciated while I was searching for a solution
  */
 
-
-#include <Arduino.h>
-#include <AsyncTCP.h>
 #include "ESPAsyncWebServer.h"
 #include "DNSServer.h"
-
-
 
 const char* ssid = "test_captive_portal"; //Name of the WIFI network hosted by the device
 const char* password =  "";               //Password
@@ -19,15 +14,12 @@ AsyncWebServer server(80);                //This creates a web server, required 
 
 DNSServer dnsServer;                      //This creates a DNS server, required for the captive portal
 
-
 void webServerSetup(){
-  
   //This is a super simple page that will be served up any time the root location is requested.  Get here intentionally by typing in the IP address.
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(200, "text/html", "<!DOCTYPE html><html><head><title>Success</title></head><body><p>Hooray</p></body>");
     Serial.println("requested /");
   });
-
 
   //This is an example of triggering for a known location.  This one seems to be common for android devices
   server.on("/generate_204", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -46,11 +38,7 @@ void webServerSetup(){
   Serial.println("Web server started");
 }
 
-
-
-
 void setup() {
-  
   Serial.begin(115200);
 
   WiFi.softAP(ssid, password);            //This starts the WIFI radio in access point mode
@@ -68,6 +56,4 @@ void setup() {
 
 void loop() {
   dnsServer.processNextRequest();         //Without this, the connected device will simply timeout trying to reach the internet
-                                          //or it might fall back to mobile data if it has it
-  
-}
+}                                         //or it might fall back to mobile data if it has it}
